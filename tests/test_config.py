@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from TALE-Toolbox.app import create_app
-from TALE-Toolbox.settings import ProdConfig, DevConfig
+from TALE_Toolbox.app import create_app
+from TALE_Toolbox.settings import ProdConfig, DevConfig
 
 
 def test_production_config():

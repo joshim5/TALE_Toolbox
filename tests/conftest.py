@@ -5,9 +5,9 @@ import os
 import pytest
 from webtest import TestApp
 
-from TALE-Toolbox.settings import TestConfig
-from TALE-Toolbox.app import create_app
-from TALE-Toolbox.database import db as _db
+from TALE_Toolbox.settings import TestConfig
+from TALE_Toolbox.app import create_app
+from TALE_Toolbox.database import db as _db
 
 from .factories import UserFactory
 

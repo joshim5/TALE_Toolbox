@@ -3,8 +3,8 @@ import datetime as dt
 
 from flask_login import UserMixin
 
-from TALE-Toolbox.extensions import bcrypt
-from TALE-Toolbox.database import (
+from TALE_Toolbox.extensions import bcrypt
+from TALE_Toolbox.database import (
     Column,
     db,
     Model,

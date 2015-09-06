@@ -4,7 +4,7 @@ import datetime as dt
 
 import pytest
 
-from TALE-Toolbox.user.models import User, Role
+from TALE_Toolbox.user.models import User, Role
 from .factories import UserFactory
 
 

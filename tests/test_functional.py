@@ -7,7 +7,7 @@ import pytest
 from flask import url_for
 
 
-from TALE-Toolbox.user.models import User
+from TALE_Toolbox.user.models import User
 from .factories import UserFactory
 
 

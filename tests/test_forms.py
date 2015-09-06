@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import pytest
 
-from TALE-Toolbox.public.forms import LoginForm
-from TALE-Toolbox.user.forms import RegisterForm
+from TALE_Toolbox.public.forms import LoginForm
+from TALE_Toolbox.user.forms import RegisterForm
 from .factories import UserFactory
 
 

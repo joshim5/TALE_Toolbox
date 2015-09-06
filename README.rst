@@ -1,5 +1,5 @@
 ===============================
-TALE-Toolbox
+TALE_Toolbox
 ===============================
 
 Generate reference sequences for TALEs built with the TALE Toolbox described in Sanjana et al., Nature Protocols (2012) and in Cong L, et al., Nature Communications (2012).
@@ -11,7 +11,7 @@ First, set your app's secret key as an environment variable. For example, exampl
 
 .. code-block:: bash
 
-    export TALE-TOOLBOX_SECRET='something-really-secret'
+    export TALE_TOOLBOX_SECRET='something-really-secret'
 
 
 Then run the following commands to bootstrap your environment.
@@ -19,8 +19,8 @@ Then run the following commands to bootstrap your environment.
 
 ::
 
-    git clone https://github.com/joshim5/TALE-Toolbox
-    cd TALE-Toolbox
+    git clone https://github.com/joshim5/TALE_Toolbox
+    cd TALE_Toolbox
     pip install -r requirements/dev.txt
     python manage.py server
 
@@ -40,7 +40,7 @@ Once you have installed your DBMS, run the following to create your app's databa
 Deployment
 ----------
 
-In your production environment, make sure the ``TALE-TOOLBOX_ENV`` environment variable is set to ``"prod"``.
+In your production environment, make sure the ``TALE_TOOLBOX_ENV`` environment variable is set to ``"prod"``.
 
 
 Shell

@@ -3,7 +3,7 @@ from flask_wtf import Form
 from wtforms import TextField, PasswordField
 from wtforms.validators import DataRequired
 
-from TALE-Toolbox.user.models import User
+from TALE_Toolbox.user.models import User
 
 
 class LoginForm(Form):

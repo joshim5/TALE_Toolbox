@@ -4,12 +4,12 @@ from flask import (Blueprint, request, render_template, flash, url_for,
                     redirect, session)
 from flask_login import login_user, login_required, logout_user
 
-from TALE-Toolbox.extensions import login_manager
-from TALE-Toolbox.user.models import User
-from TALE-Toolbox.public.forms import LoginForm
-from TALE-Toolbox.user.forms import RegisterForm
-from TALE-Toolbox.utils import flash_errors
-from TALE-Toolbox.database import db
+from TALE_Toolbox.extensions import login_manager
+from TALE_Toolbox.user.models import User
+from TALE_Toolbox.public.forms import LoginForm
+from TALE_Toolbox.user.forms import RegisterForm
+from TALE_Toolbox.utils import flash_errors
+from TALE_Toolbox.database import db
 
 blueprint = Blueprint('public', __name__, static_folder="../static")
 

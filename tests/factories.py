@@ -2,8 +2,8 @@
 from factory import Sequence, PostGenerationMethodCall
 from factory.alchemy import SQLAlchemyModelFactory
 
-from TALE-Toolbox.user.models import User
-from TALE-Toolbox.database import db
+from TALE_Toolbox.user.models import User
+from TALE_Toolbox.database import db
 
 
 class BaseFactory(SQLAlchemyModelFactory):

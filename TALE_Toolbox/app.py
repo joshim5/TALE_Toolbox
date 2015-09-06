@@ -2,9 +2,9 @@
 """The app module, containing the app factory function."""
 from flask import Flask, render_template
 
-from TALE-Toolbox.settings import ProdConfig
-from TALE-Toolbox.assets import assets
-from TALE-Toolbox.extensions import (
+from TALE_Toolbox.settings import ProdConfig
+from TALE_Toolbox.assets import assets
+from TALE_Toolbox.extensions import (
     bcrypt,
     cache,
     db,
@@ -12,7 +12,7 @@ from TALE-Toolbox.extensions import (
     migrate,
     debug_toolbar,
 )
-from TALE-Toolbox import public, user
+from TALE_Toolbox import public, user
 
 
 def create_app(config_object=ProdConfig):

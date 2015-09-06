@@ -4,12 +4,12 @@ import os
 from flask_script import Manager, Shell, Server
 from flask_migrate import MigrateCommand
 
-from TALE-Toolbox.app import create_app
-from TALE-Toolbox.user.models import User
-from TALE-Toolbox.settings import DevConfig, ProdConfig
-from TALE-Toolbox.database import db
+from TALE_Toolbox.app import create_app
+from TALE_Toolbox.user.models import User
+from TALE_Toolbox.settings import DevConfig, ProdConfig
+from TALE_Toolbox.database import db
 
-if os.environ.get("TALE-TOOLBOX_ENV") == 'prod':
+if os.environ.get("TALE_TOOLBOX_ENV") == 'prod':
     app = create_app(ProdConfig)
 else:
     app = create_app(DevConfig)
