@@ -3,31 +3,46 @@
 {% block content %}
 <!-- Main jumbotron for a primary marketing message or call to action -->
 <div class="jumbotron">
+  <h1>TALE Sequence Generator</h1>
 
-  <h1>Welcome to TALE_Toolbox</h1>
-
-  <p>This is a starter Flask template. It includes Bootstrap 3, jQuery 2, Flask-SQLAlchemy, WTForms, and various testing utilities out of the box.</p>
-  <p><a href="https://github.com/sloria/cookiecutter-flask" class="btn btn-primary btn-large">Learn more &raquo;</a></p>
+  <p>Generate TALE sequences based on a custom target site.</p>
+  <ul>
+    <li>Target sites typically begin with a thymine and consist of 2-26 DNA bases, e.g. "TAGAGACTAGAC"</li>
+    <li>Binding domains can be inserted into a TALE-TF (VP64 activation domain) or TALEN (Fok1 nuclease) backbone.</li>
+    <li>Generated ORF sequences can be used as the reference sequence for sequence alignment to confirm correct construction of custom TALEs.</li>
+  </ul>
+  <p><a href="/about" class="btn btn-primary btn-large">Learn more &raquo;</a></p>
 </div><!-- /.jumbotron -->
 
 <div class="body-content">
   <div class="row">
-    <div class="col-lg-4">
-      <h2><i class="fa fa-code"></i> Bootstrap 3</h2>
-      <p>Sleek, intuitive, and powerful mobile-first front-end framework for faster and easier web development.</p>
-      <p><a class="btn btn-default" href="http://getbootstrap.com/">Official website &raquo;</a></p>
+    <div class="col-md-6 col-sm-12">
+      <h2><i class="fa fa-code"></i> Target Sequence</h2>
+      <div class="input-group">
+        <div class="input-group-btn" id="select-g-monomer">
+          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">NN <span class="caret"></span></button>
+          <ul class="dropdown-menu">
+            <li class="dropdown-header">Select G Monomer</li>
+            <li><a href="#">NN</a></li>
+            <li><a href="#">NH</a></li>
+          </ul>
+        </div><!-- /btn-group -->
+        <input type="text" class="form-control" aria-label="...">
+      </div><!-- /input-group -->
     </div>
-    <div class="col-lg-4">
-      <h2><i class="fa fa-flask"></i> SQLAlchemy</h2>
-      <p>SQLAlchemy is the Python SQL toolkit and Object Relational Mapper that gives application developers the full power and flexibility of SQL.</p>
-      <p><a href="http://www.sqlalchemy.org/" class="btn btn-default" href="#">Official website &raquo;</a></p>
-   </div>
-    <div class="col-lg-4">
-      <h2><i class="fa fa-edit"></i> WTForms</h2>
-      <p>WTForms is a flexible forms validation and rendering library for python web development.</p>
-      <p><a href="http://wtforms.simplecodes.com/" class="btn btn-default" href="#">Official website &raquo;</a></p>
+    <div class="col-md-3 col-sm-6">
+      <h2><i class="fa fa-flask"></i> Backbone</h2>
+      <div id="TALE-type" class="btn-group" data-toggle="buttons">
+        <a href="#TALEN" class="btn btn-default active" data-toggle="TALE-type">
+          <input type="radio">TALEN</a>
+        <a href="#TALE-TF" class="btn btn-default" data-toggle="TALE-type">
+          <input type="radio">TALE-TF</a>
+      </div>
+    </div>
+    <div class="col-md-3 col-sm-6">
+      <h2><i class="fa fa-edit"></i> Generate</h2>
+      <p><button type="button" class="btn btn-primary">Download GB Vector Map</button></p>
     </div>
   </div><!-- /.row -->
-</div>
 {% endblock %}
 
