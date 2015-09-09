@@ -46,20 +46,20 @@ class ReferenceSequenceGenerator():
 		if self.g_monomer == "NH":
 			self.hyper_variable['G'] = "AACCAC"
 
-	def beginning_sequence():
+	def beginning_sequence(self):
 		if self.backbone == "TALETF":
 			return self.beginning_TALETF
 		else:
 			return self.beginning_TALEN
 
-	def ending_sequence():
+	def ending_sequence(self):
 		if self.backbone == "TALETF":
 			return self.ending_TALETF
 		else:
 			return self.ending_TALEN
 
 	# Generate the DNA sequences encoding a tandem repeat
-	def tandem_repeat(repeat, nt):
+	def tandem_repeat(self, repeat, nt):
 		"""For a given repeat number and nucleotide, generate DNA sequences encoding a tandem repeat"""
 		# The first tandem repeat is a special case
 		if repeat == 0:
@@ -73,7 +73,7 @@ class ReferenceSequenceGenerator():
 		else:
 			return tandem_repeat_outer_start_common[repeat % 5] + tandem_repeat_inner_start + hyper_variable[nt] + tandem_repeat_inner_end + tandem_repeat_outer_end + tandem_repeat_outer_end_common[repeat % 5]
 
-	def half_repeat(nt):
+	def half_repeat(self, nt):
 		"""For a given nucleotide, generate DNA sequence encoding a half repeat. Explicitly a different sequence than a full tandem repeat"""
 		# LTPEQVVAIAS__GGRPALE
 		if self.backbone == 'TALETF':
@@ -97,7 +97,7 @@ class ReferenceSequenceGenerator():
 			elif nt == 'G': 
 				return 'CTCACGCCTGAGCAGGTAGTGGCTATTGCATCCAACAACGGGGGCAGACCCGCACTGGAG'
 
-	def generate_sequence():
+	def generate_sequence(self):
 		seq = self.beginning_sequence()
 		for idx, nt in enumerate(self.sequence[:-1]):
 			seq += tandem_repeat(idx, nt)
