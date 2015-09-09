@@ -5,7 +5,7 @@
 <div class="jumbotron">
   <h1>TALE Sequence Generator</h1>
 
-  <p>Generate TALE sequences based on a custom target site.</p>
+  <p>Generate TALE reference sequences based on a custom target site.</p>
   <ul>
     <li>Target sites typically begin with a thymine and consist of 2-26 DNA bases, e.g. "TAGAGACTAGAC"</li>
     <li>Binding domains can be inserted into a TALE-TF (VP64 activation domain) or TALEN (Fok1 nuclease) backbone.</li>
@@ -27,21 +27,21 @@
             <li><a href="#">NH</a></li>
           </ul>
         </div><!-- /btn-group -->
-        <input type="text" class="form-control" aria-label="...">
+        <input type="text" class="form-control" id="target-sequence" aria-label="...">
       </div><!-- /input-group -->
     </div>
     <div class="col-md-3 col-sm-6">
       <h2><i class="fa fa-flask"></i> Backbone</h2>
       <div id="TALE-type" class="btn-group" data-toggle="buttons">
-        <a href="#TALEN" class="btn btn-default active" data-toggle="TALE-type">
+        <button class="btn btn-default active" data-toggle="TALE-type" data-backbone="TALEN">
           <input type="radio">TALEN</a>
-        <a href="#TALE-TF" class="btn btn-default" data-toggle="TALE-type">
+        <button class="btn btn-default" data-toggle="TALE-type" data-backbone="TALE-TF">
           <input type="radio">TALE-TF</a>
       </div>
     </div>
     <div class="col-md-3 col-sm-6">
       <h2><i class="fa fa-edit"></i> Generate</h2>
-      <p><button type="button" class="btn btn-primary">Download GB Vector Map</button></p>
+      <p><a href="#" class="btn btn-primary" id="download-gb-vector">Download GB Vector Map</a></p>
     </div>
   </div><!-- /.row -->
 {% endblock %}

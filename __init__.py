@@ -1,5 +1,5 @@
 # Welcome to TALE-Toolbox. Developed by Joshua Meier 
-# in collaboration with with the Zhang Lab at MIT.
+# in collaboration with the Zhang Lab at MIT.
 #
 # To run this application yourself, please install its requirements first:
 #

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Public section, including homepage and signup."""
 from flask import (Blueprint, request, render_template, flash, url_for,
-                    redirect, session)
+                    redirect, session, make_response)
 from flask_login import login_user, login_required, logout_user
 
 from TALE_Toolbox.extensions import login_manager
@@ -10,6 +10,8 @@ from TALE_Toolbox.public.forms import LoginForm
 from TALE_Toolbox.user.forms import RegisterForm
 from TALE_Toolbox.utils import flash_errors
 from TALE_Toolbox.database import db
+
+from TALE_Toolbox.computations import generate_genbank
 
 blueprint = Blueprint('public', __name__, static_folder="../static")
 
@@ -61,3 +63,14 @@ def register():
 def about():
     form = LoginForm(request.form)
     return render_template("public/about.html", form=form)
+
+@blueprint.route("/generate/")
+def generate():
+    sequence = request.args.get('sequence')
+    g_monomer = request.args.get('g_monomer')
+    backbone = request.args.get('backbone')
+    genbank = generate_genbank(sequence, g_monomer, backbone)
+    response = make_response(genbank)
+    response.headers["Content-Disposition"] = "attachment; filename=reference_seq.gb"
+    response.status_code = 200
+    return response
