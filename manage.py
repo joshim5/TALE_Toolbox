@@ -5,9 +5,7 @@ from flask_script import Manager, Shell, Server
 from flask_migrate import MigrateCommand
 
 from TALE_Toolbox.app import create_app
-from TALE_Toolbox.user.models import User
 from TALE_Toolbox.settings import DevConfig, ProdConfig
-from TALE_Toolbox.database import db
 
 if os.environ.get("TALE_TOOLBOX_ENV") == 'prod':
     app = create_app(ProdConfig)
@@ -24,7 +22,7 @@ def _make_context():
     """Return context dict for a shell session so you can access
     app, db, and the User model by default.
     """
-    return {'app': app, 'db': db, 'User': User}
+    return {'app': app, 'db': null, 'User': null}
 
 
 @manager.command
@@ -37,7 +35,6 @@ def test():
 
 manager.add_command('server', Server())
 manager.add_command('shell', Shell(make_context=_make_context))
-manager.add_command('db', MigrateCommand)
 
 if __name__ == '__main__':
     manager.run()

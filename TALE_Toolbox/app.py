@@ -7,13 +7,9 @@ from TALE_Toolbox.assets import assets
 from TALE_Toolbox.extensions import (
     bcrypt,
     cache,
-    db,
-    login_manager,
-    migrate,
-    debug_toolbar,
+    debug_toolbar
 )
-from TALE_Toolbox import public, user
-
+from TALE_Toolbox import public
 
 def create_app(config_object=ProdConfig):
     """An application factory, as explained here:
@@ -33,16 +29,12 @@ def register_extensions(app):
     assets.init_app(app)
     bcrypt.init_app(app)
     cache.init_app(app)
-    db.init_app(app)
-    login_manager.init_app(app)
     debug_toolbar.init_app(app)
-    migrate.init_app(app, db)
     return None
 
 
 def register_blueprints(app):
     app.register_blueprint(public.views.blueprint)
-    app.register_blueprint(user.views.blueprint)
     return None
 
 

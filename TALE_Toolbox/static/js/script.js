@@ -21,7 +21,7 @@ $(function(){
     	var params = {
     		sequence: $("#target-sequence").val().toUpperCase(),
     		g_monomer: $("#select-g-monomer .btn").text().trim(),
-    		backbone: $("#TALE-type .active").data("backbone")
+    		backbone: $("#TALE-type .active").data("backbone").replace('-','')
     	};
 
     	// validation
@@ -30,7 +30,7 @@ $(function(){
     	} else if (params.sequence.length < 2) {
     		show_error("Target must be at least 2 bases in length.");
     	} else if (params.sequence.length > 26) {
-    		show_error("Target cannot be greater than 26 bases.");
+    		show_error("Target cannot be longer than 26 bases.");
     	} else if (!(/^([ATGC]*)$/.test(params.sequence))) {
     		show_error("Target must consist of nucleotides {A,G,T,C}.")
     	} else {

@@ -119,7 +119,7 @@ class ReferenceSequenceGenerator():
 			return self.generate_genbank_TALETF()
 
 	def generate_genbank_TALETF(self):
-		record = SeqRecord(Seq(self.generate_sequence(), IUPAC.unambiguous_dna), name="TALE-TF Reference", id="TALE-TF", description=self.sequence)
+		record = SeqRecord(Seq(self.generate_sequence(), IUPAC.unambiguous_dna), name="TALE Reference", id="TALE-TF", description=self.sequence)
 		
 		# Constant features
 		f = SeqFeature(FeatureLocation(1, 805), type="pUC_ori", qualifiers = {"label" : "pUC_ori"})
@@ -216,7 +216,7 @@ class ReferenceSequenceGenerator():
 		return record.format("gb")
 
 	def generate_genbank_TALEN(self):
-		record = SeqRecord(Seq(self.generate_sequence(), IUPAC.unambiguous_dna), name="TALEN Reference", id="TALEN", description=self.sequence)
+		record = SeqRecord(Seq(self.generate_sequence(), IUPAC.unambiguous_dna), name="TALE Reference", id="TALEN", description=self.sequence)
 		
 		# Constant features
 		f = SeqFeature(FeatureLocation(1, 805), type="pUC_ori", qualifiers = {"label" : "pUC_ori"})
