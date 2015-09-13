@@ -18,17 +18,20 @@
   <div class="row">
     <div class="col-md-6 col-sm-12">
       <h2><i class="fa fa-code"></i> Target Sequence</h2>
-      <div class="input-group">
-        <div class="input-group-btn" id="select-g-monomer">
-          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">NN <span class="caret"></span></button>
-          <ul class="dropdown-menu">
-            <li class="dropdown-header">Select G Monomer</li>
-            <li><a href="#">NN</a></li>
-            <li><a href="#">NH</a></li>
-          </ul>
-        </div><!-- /btn-group -->
-        <input type="text" class="form-control" id="target-sequence" aria-label="...">
-      </div><!-- /input-group -->
+      <div id="target-input-form" class="form-group">
+        <div class="input-group">
+          <div class="input-group-btn" id="select-g-monomer">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle=" dropdown" aria-haspopup="true" aria-expanded="false">NN <span class="caret"> </span></button>
+            <ul class="dropdown-menu">
+              <li class="dropdown-header">Select G Monomer</li>
+              <li><a href="#">NN</a></li>
+              <li><a href="#">NH</a></li>
+            </ul>
+          </div><!-- /btn-group -->
+         <input type="text" class="form-control" id="target-sequence" aria-label="..." placeholder="Insert sequence here...">
+        </div><!-- /input-group -->
+        <span id="error-text" class="help-block hidden">This field is required.</span>
+      </div><!-- /form-group -->
     </div>
     <div class="col-md-3 col-sm-6">
       <h2><i class="fa fa-flask"></i> Backbone</h2>
