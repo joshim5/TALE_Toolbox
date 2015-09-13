@@ -11,7 +11,9 @@ from TALE_Toolbox.user.forms import RegisterForm
 from TALE_Toolbox.utils import flash_errors
 from TALE_Toolbox.database import db
 
-from TALE_Toolbox.computations import generate_genbank
+from TALE_Toolbox.computations import ReferenceSequenceGenerator
+
+#from TALE_Toolbox.computations import generate_genbank
 
 blueprint = Blueprint('public', __name__, static_folder="../static")
 
@@ -69,7 +71,8 @@ def generate():
     sequence = request.args.get('sequence')
     g_monomer = request.args.get('g_monomer')
     backbone = request.args.get('backbone')
-    genbank = generate_genbank(sequence, g_monomer, backbone)
+    generator = ReferenceSequenceGenerator(sequence, g_monomer, backbone)
+    genbank = generator.generate_genbank()
     response = make_response(genbank)
     response.headers["Content-Disposition"] = "attachment; filename=reference_seq.gb"
     response.status_code = 200

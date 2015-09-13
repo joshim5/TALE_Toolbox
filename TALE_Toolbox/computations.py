@@ -1,3 +1,9 @@
+from Bio import SeqIO
+from Bio.SeqRecord import SeqRecord
+from Bio.Seq import Seq
+from Bio.Alphabet import IUPAC
+from Bio.SeqFeature import SeqFeature, FeatureLocation
+
 class ReferenceSequenceGenerator():
 	"""Generate TALE Reference Sequences"""
 
@@ -40,7 +46,7 @@ class ReferenceSequenceGenerator():
 	}
 
 	def __init__(self, sequence, g_monomer, backbone):
-		self.sequence = sequence
+		self.sequence = sequence.upper()
 		self.g_monomer = g_monomer
 		self.backbone = backbone
 		if self.g_monomer == "NH":
@@ -63,15 +69,16 @@ class ReferenceSequenceGenerator():
 		"""For a given repeat number and nucleotide, generate DNA sequences encoding a tandem repeat"""
 		# The first tandem repeat is a special case
 		if repeat == 0:
-			return tandem_repeat_outer_start_common[3] + tandem_repeat_inner_start + hyper_variable[nt] + tandem_repeat_inner_end + tandem_repeat_outer_end + tandem_repeat_outer_end_common[0]
+			return self.tandem_repeat_outer_start_common[3] + self.tandem_repeat_inner_start + self.hyper_variable[nt] + self.tandem_repeat_inner_end + self.tandem_repeat_outer_end_common[0]
 		
 		# Alternate each fifth tandem repeat
 		elif repeat % 5 == 0:
-			return tandem_repeat_outer_start_rare[repeat/5] + tandem_repeat_inner_start + hyper_variable[nt] + tandem_repeat_inner_end + tandem_repeat_outer_end + tandem_repeat_outer_end_rare[repeat/5]
+			return self.tandem_repeat_outer_start_rare[repeat/5] + self.tandem_repeat_inner_start + self.hyper_variable[nt] + self.tandem_repeat_inner_end + self.tandem_repeat_outer_end_rare[repeat/5]
 
 		# General case
 		else:
-			return tandem_repeat_outer_start_common[repeat % 5] + tandem_repeat_inner_start + hyper_variable[nt] + tandem_repeat_inner_end + tandem_repeat_outer_end + tandem_repeat_outer_end_common[repeat % 5]
+			return self.tandem_repeat_outer_start_common[repeat % 5] + self.tandem_repeat_inner_start + self.hyper_variable[nt] + self.tandem_repeat_inner_end + self.tandem_repeat_outer_end_common[repeat % 5]
+			#return self.tandem_repeat_outer_start_common[repeat % 5] + self.tandem_repeat_inner_start + self.hyper_variable[nt] + self.tandem_repeat_inner_end + self.tandem_repeat_outer_end + self.tandem_repeat_outer_end_common[repeat % 5]
 
 	def half_repeat(self, nt):
 		"""For a given nucleotide, generate DNA sequence encoding a half repeat. Explicitly a different sequence than a full tandem repeat"""
@@ -87,7 +94,7 @@ class ReferenceSequenceGenerator():
 				return 'CTCACGCCTGAGCAGGTAGTGGCTATTGCATCCAATAACGGGGGCAGACCCGCACTGGAG'
 		
 		# LTPEQVVAIAS__GGRPALE
-		if backbone == 'TALEN':   # If TALEN backbone, use the following 0.5 repeats
+		if self.backbone == 'TALEN':   # If TALEN backbone, use the following 0.5 repeats
 			if nt == 'A':
 				return 'CTCACGCCTGAGCAGGTAGTGGCTATTGCATCCAACATCGGGGGCAGACCCGCACTGGAG'
 			elif nt == 'T':
@@ -99,7 +106,201 @@ class ReferenceSequenceGenerator():
 
 	def generate_sequence(self):
 		seq = self.beginning_sequence()
-		for idx, nt in enumerate(self.sequence[:-1]):
-			seq += tandem_repeat(idx, nt)
-		seq += half_repeat(self.sequence[-1])
+		for idx, nt in enumerate(self.sequence[1:-1]):
+			seq += self.tandem_repeat(idx, nt)
+		seq += self.half_repeat(self.sequence[-1])
 		seq += self.ending_sequence()
+		return seq.upper()
+
+	def generate_genbank(self):
+		if self.backbone == "TALEN":
+			return self.generate_genbank_TALEN()
+		else:
+			return self.generate_genbank_TALETF()
+
+	def generate_genbank_TALETF(self):
+		record = SeqRecord(Seq(self.generate_sequence(), IUPAC.unambiguous_dna), name="TALE-TF Reference", id="TALE-TF", description=self.sequence)
+		
+		# Constant features
+		f = SeqFeature(FeatureLocation(1, 805), type="pUC_ori", qualifiers = {"label" : "pUC_ori"})
+		record.features.append(f)
+
+		f = SeqFeature(FeatureLocation(1453, 2054), type="CMV Promoter", qualifiers = {"label" : "CMV Promoter"})
+		record.features.append(f)
+
+		f = SeqFeature(FeatureLocation(2119, 2839), type="TAL N-Term", qualifiers = {"label" : "TAL N-Term"})
+		record.features.append(f)	
+
+		# Repeats have 34 amino acids
+		tandem_repeat_length = (len(self.sequence) - 2) * 34 * 3
+		tandem_repeat_end = 2839 + tandem_repeat_length
+
+		f = SeqFeature(FeatureLocation(2839, tandem_repeat_end), type="Tandem Repeats", qualifiers = {"label" : "Tandem Repeats"})
+		record.features.append(f)
+
+		# Half repeat has 20 amino acids
+		half_repeat_length = 20 * 3
+		half_repeat_end = tandem_repeat_end + half_repeat_length
+
+		f = SeqFeature(FeatureLocation(tandem_repeat_end, half_repeat_end), type="Half Repeat", qualifiers = {"label" : "Half Repeat"})
+		record.features.append(f)	
+
+		# C terminus has 178 amino acids
+		c_terminus_length = 178 * 3
+		c_terminus_end = half_repeat_end + c_terminus_length
+
+		f = SeqFeature(FeatureLocation(half_repeat_end, c_terminus_end), type="TAL C-term", qualifiers = {"label" : "TAL C-term"})
+		record.features.append(f)
+
+		# We skip one amino acid; NLS has has 11 amino acids
+		nls_length = 1 * 3
+		nls_end = 3 + c_terminus_end + nls_length
+
+		f = SeqFeature(FeatureLocation(3 + c_terminus_end, nls_end), type="NLS (SPKKKRKVEA)", qualifiers = {"label" : "NLS (SPKKKRKVEA)"})
+		record.features.append(f)
+
+		# VP64 has 57 amino acids
+		vp64_length = 57 * 3
+		vp64_end = nls_end + vp64_length
+
+		f = SeqFeature(FeatureLocation(nls_end, vp64_end), type="VP64 AD", qualifiers = {"label" : "VP64 AD"})
+		record.features.append(f)
+
+		# We skip two amino acids; 22A has 21 amino acids
+		a_length = 21 * 3
+		a_end = 6 + vp64_end + a_length
+
+		f = SeqFeature(FeatureLocation(6 + vp64_end, a_end), type="22A", qualifiers = {"label" : "22A"})
+		record.features.append(f)
+
+		# EGFP has 238 amino acids
+		egfp_length = 238 * 3
+		egfp_end = a_end + egfp_length
+
+		f = SeqFeature(FeatureLocation(a_end, egfp_end), type="EGFP", qualifiers = {"label" : "EGFP"})
+		record.features.append(f)
+
+		# We do not label the next 635 nucleotides
+		unlabeled_length = 635
+		unlabeled_end = egfp_end + unlabeled_length
+
+		# Hygromycin has 342 amino acids
+		hygromycin_length = 342 * 3
+		hygromycin_end = unlabeled_end + hygromycin_length
+
+		f = SeqFeature(FeatureLocation(unlabeled_end, hygromycin_end), type="Hygromycin", qualifiers = {"label" : "Hygromycin"})
+		record.features.append(f)
+
+		# We not label the next 127 nucleotides
+		unlabeled_length = 127
+		unlabeled_end = hygromycin_end + unlabeled_length
+
+		# SV40 pA Signal is 131 nucleotides
+		sv40_signal_length = 131
+		sv40_signal_end = unlabeled_end + sv40_signal_length
+
+		f = SeqFeature(FeatureLocation(unlabeled_end, sv40_signal_end), type="SV40 pA Signal", qualifiers = {"label" : "SV40 pA Signal"})
+		record.features.append(f)
+
+		# We do not label the next 54 nucleotides
+		unlabeled_length = 54
+		unlabeled_end = sv40_signal_end + unlabeled_length
+
+		# Ampicillin is 283 amino acids
+		ampicillin_length = 283 * 3
+		ampicillin_end = unlabeled_end + ampicillin_length
+
+		f = SeqFeature(FeatureLocation(unlabeled_end, ampicillin_end, strand=-1), type="Ampicillin", qualifiers = {"label" : "Ampicillin"})
+		record.features.append(f)
+
+		return record.format("gb")
+
+	def generate_genbank_TALEN(self):
+		record = SeqRecord(Seq(self.generate_sequence(), IUPAC.unambiguous_dna), name="TALEN Reference", id="TALEN", description=self.sequence)
+		
+		# Constant features
+		f = SeqFeature(FeatureLocation(1, 805), type="pUC_ori", qualifiers = {"label" : "pUC_ori"})
+		record.features.append(f)
+
+		f = SeqFeature(FeatureLocation(1453, 2054), type="CMV Promoter", qualifiers = {"label" : "CMV Promoter"})
+		record.features.append(f)
+
+		f = SeqFeature(FeatureLocation(2112, 2232), type="NLS", qualifiers = {"label" : "NLS"})
+		record.features.append(f)
+
+		f = SeqFeature(FeatureLocation(2232, 2640), type="TAL N-Term", qualifiers = {"label" : "TAL N-Term"})
+		record.features.append(f)
+
+		# Repeats have 34 amino acids
+		tandem_repeat_length = (len(self.sequence) - 2) * 34 * 3
+		tandem_repeat_end = 2640 + tandem_repeat_length
+
+		f = SeqFeature(FeatureLocation(2640, tandem_repeat_end), type="Tandem Repeats", qualifiers = {"label" : "Tandem Repeats"})
+		record.features.append(f)
+
+		# Half repeat has 20 amino acids
+		half_repeat_length = 20 * 3
+		half_repeat_end = tandem_repeat_end + half_repeat_length
+
+		f = SeqFeature(FeatureLocation(tandem_repeat_end, half_repeat_end), type="Half Repeat", qualifiers = {"label" : "Half Repeat"})
+		record.features.append(f)
+
+		# C terminus has 63 amino acids
+		c_terminus_length = 63 * 3
+		c_terminus_end = half_repeat_end + c_terminus_length
+
+		f = SeqFeature(FeatureLocation(half_repeat_end, c_terminus_end), type="TAL C-term", qualifiers = {"label" : "TAL C-term"})
+		record.features.append(f)
+
+		# Fok1 has 201 amino acids
+		fok1_length = 201 * 3
+		fok1_end = c_terminus_end + fok1_length
+
+		f = SeqFeature(FeatureLocation(c_terminus_end, fok1_end), type="Fok1", qualifiers = {"label" : "Fok1"})
+		record.features.append(f)
+
+		# We do not label the next 79 amino acids
+		unlabeled_length = 79 * 3
+		unlabeled_end = fok1_end + unlabeled_length
+
+		# sv_ori has 344 nucleotides
+		sv_ori_length = 344
+		sv_ori_end = unlabeled_end + sv_ori_length
+
+		f = SeqFeature(FeatureLocation(unlabeled_end, sv_ori_end), type="SV40 ori", qualifiers = {"label" : "SV40 ori"})
+		record.features.append(f)
+
+		# We not label the next 15 amino acids
+		unlabeled_length = 15 * 3
+		unlabeled_end = sv_ori_end + unlabeled_length
+
+		# Hygromycin is 342 amino acids
+		hygromycin_length = 342 * 3
+		hygromycin_end = unlabeled_end + hygromycin_length
+
+		f = SeqFeature(FeatureLocation(unlabeled_end, hygromycin_end), type="Hygromycin", qualifiers = {"label" : "Hygromycin"})
+		record.features.append(f)
+
+		# We not label the next 127 nucleotides
+		unlabeled_length = 127
+		unlabeled_end = hygromycin_end + unlabeled_length
+
+		# SV40 pA Signal is 131 nucleotides
+		sv40_signal_length = 131
+		sv40_signal_end = unlabeled_end + sv40_signal_length
+
+		f = SeqFeature(FeatureLocation(unlabeled_end, sv40_signal_end), type="SV40 pA Signal", qualifiers = {"label" : "SV40 pA Signal"})
+		record.features.append(f)
+
+		# We do not label the next 54 nucleotides
+		unlabeled_length = 54
+		unlabeled_end = sv40_signal_end + unlabeled_length
+
+		# Ampicillin is 283 amino acids
+		ampicillin_length = 283 * 3
+		ampicillin_end = unlabeled_end + ampicillin_length
+
+		f = SeqFeature(FeatureLocation(unlabeled_end, ampicillin_end, strand=-1), type="Ampicillin", qualifiers = {"label" : "Ampicillin"})
+		record.features.append(f)
+
+		return record.format("gb")
