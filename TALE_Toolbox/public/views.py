@@ -15,7 +15,6 @@ def home():
 
 @blueprint.route("/about/")
 def about():
-    form = LoginForm(request.form)
     return render_template("public/about.html")
 
 @blueprint.route("/generate/")
