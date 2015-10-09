@@ -24,6 +24,8 @@ def create_app(config_object=ProdConfig):
     register_errorhandlers(app)
     return app
 
+def create_app_prod():
+    return create_app(ProdConfig)
 
 def register_extensions(app):
     assets.init_app(app)
