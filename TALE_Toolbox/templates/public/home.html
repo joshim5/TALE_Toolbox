@@ -1,8 +1,9 @@
 
 {% extends "layout.html" %}
-{% block content %}
+{% block early_content %}
 <!-- Main jumbotron for a primary marketing message or call to action -->
 <div class="jumbotron">
+  <div class="container">
   <h1>TALE Sequence Generator</h1>
 
   <p>Generate TALE reference sequences based on a custom target site.</p>
@@ -12,8 +13,10 @@
     <li>Generated ORF sequences can be used as the reference sequence for sequence alignment to confirm correct construction of custom TALEs.</li>
   </ul>
   <p><a href="/about" class="btn btn-primary btn-large">Learn more &raquo;</a></p>
-</div><!-- /.jumbotron -->
+</div></div><!-- /.jumbotron -->
+{% endblock %}
 
+{% block content %}
 <div class="body-content">
   <div class="row">
     <div class="col-md-6 col-sm-12">
