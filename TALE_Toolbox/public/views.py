@@ -25,6 +25,12 @@ def generate():
     generator = ReferenceSequenceGenerator(sequence, g_monomer, backbone)
     genbank = generator.generate_genbank()
     response = make_response(genbank)
-    response.headers["Content-Disposition"] = "attachment; filename=reference_seq.gb"
+
+    # Wequence with TF or Nuc appended to the name, e.g. “TALE_Nuc_TGAACAGATGC.gb"
+    filename = "TALE_Nuc_"
+    if backbone == "TALETF":
+        filename = "TALE_TF_"
+    filename = filename + sequence + ".gb"
+    response.headers["Content-Disposition"] = "attachment; filename=" + filename
     response.status_code = 200
     return response
