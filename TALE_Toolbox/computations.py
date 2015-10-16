@@ -45,12 +45,20 @@ class ReferenceSequenceGenerator():
 		'C': 'CATGAC' # HD
 	}
 
+	hyper_variable_amino = {
+		'T': 'NG',
+		'A': 'NI',
+		'G': 'NN',
+		'C': 'HD'
+	}
+
 	def __init__(self, sequence, g_monomer, backbone):
 		self.sequence = sequence.upper()
 		self.g_monomer = g_monomer
 		self.backbone = backbone
 		if self.g_monomer == "NH":
 			self.hyper_variable['G'] = "AACCAC"
+			self.hyper_variable_amino['G'] = "NH"
 
 	def beginning_sequence(self):
 		if self.backbone == "TALETF":
@@ -132,17 +140,19 @@ class ReferenceSequenceGenerator():
 		record.features.append(f)	
 
 		# Repeats have 34 amino acids
-		tandem_repeat_length = (len(self.sequence) - 2) * 34 * 3
-		tandem_repeat_end = 2839 + tandem_repeat_length
-
-		f = SeqFeature(FeatureLocation(2839, tandem_repeat_end), type="Tandem Repeats", qualifiers = {"label" : "Tandem Repeats"})
-		record.features.append(f)
+		tandem_repeat_length = 34 * 3
+		prev_ending = 2839
+		for idx, nt in enumerate(self.sequence[1:-1]):
+			repeat_name = "Repeat %d: %s" % (idx + 1, self.hyper_variable_amino[nt])
+			f = SeqFeature(FeatureLocation(prev_ending, prev_ending + tandem_repeat_length), type="Tandem Repeats", qualifiers = {"label" : repeat_name})
+			record.features.append(f)
+			prev_ending = prev_ending + tandem_repeat_length
 
 		# Half repeat has 20 amino acids
 		half_repeat_length = 20 * 3
-		half_repeat_end = tandem_repeat_end + half_repeat_length
+		half_repeat_end = prev_ending + half_repeat_length
 
-		f = SeqFeature(FeatureLocation(tandem_repeat_end, half_repeat_end), type="Half Repeat", qualifiers = {"label" : "Half Repeat"})
+		f = SeqFeature(FeatureLocation(prev_ending, half_repeat_end), type="Half Repeat", qualifiers = {"label" : "Half Repeat"})
 		record.features.append(f)	
 
 		# C terminus has 178 amino acids
@@ -232,17 +242,19 @@ class ReferenceSequenceGenerator():
 		record.features.append(f)
 
 		# Repeats have 34 amino acids
-		tandem_repeat_length = (len(self.sequence) - 2) * 34 * 3
-		tandem_repeat_end = 2640 + tandem_repeat_length
-
-		f = SeqFeature(FeatureLocation(2640, tandem_repeat_end), type="Tandem Repeats", qualifiers = {"label" : "Tandem Repeats"})
-		record.features.append(f)
+		tandem_repeat_length = 34 * 3
+		prev_ending = 2640
+		for idx, nt in enumerate(self.sequence[1:-1]):
+			repeat_name = "Repeat %d: %s" % (idx + 1, self.hyper_variable_amino[nt])
+			f = SeqFeature(FeatureLocation(prev_ending, prev_ending + tandem_repeat_length), type="Tandem Repeats", qualifiers = {"label" : repeat_name})
+			record.features.append(f)
+			prev_ending = prev_ending + tandem_repeat_length
 
 		# Half repeat has 20 amino acids
 		half_repeat_length = 20 * 3
-		half_repeat_end = tandem_repeat_end + half_repeat_length
+		half_repeat_end = prev_ending + half_repeat_length
 
-		f = SeqFeature(FeatureLocation(tandem_repeat_end, half_repeat_end), type="Half Repeat", qualifiers = {"label" : "Half Repeat"})
+		f = SeqFeature(FeatureLocation(prev_ending, half_repeat_end), type="Half Repeat", qualifiers = {"label" : "Half Repeat"})
 		record.features.append(f)
 
 		# C terminus has 63 amino acids
